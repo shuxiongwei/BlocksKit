@@ -12,6 +12,8 @@
 {
 	if (!block) return;
 	
+	self.userInteractionEnabled = YES;
+	
 	UITapGestureRecognizer *gesture = [UITapGestureRecognizer bk_recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
 		if (state == UIGestureRecognizerStateRecognized) block();
 	}];
@@ -50,6 +52,40 @@
 	[self.subviews enumerateObjectsUsingBlock:^(UIView *subview, NSUInteger idx, BOOL *stop) {
 		block(subview);
 	}];
+}
+
+- (void)bk_whenLongPressed:(void (^)(void))longBlock tapped:(void (^)(void))tapBlock {
+    if (!longBlock && !tapBlock) return;
+    
+    self.userInteractionEnabled = YES;
+
+    UITapGestureRecognizer *gesture = [UITapGestureRecognizer bk_recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateRecognized) tapBlock();
+    }];
+    gesture.numberOfTouchesRequired = 1;
+    gesture.numberOfTapsRequired = 1;
+    
+    [self.gestureRecognizers enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (![obj isKindOfClass:[UITapGestureRecognizer class]]) return;
+        
+        UITapGestureRecognizer *tap = obj;
+        BOOL rightTouches = (tap.numberOfTouchesRequired == 1);
+        BOOL rightTaps = (tap.numberOfTapsRequired == 1);
+        if (rightTouches && rightTaps) {
+            [gesture requireGestureRecognizerToFail:tap];
+        }
+    }];
+    if (tapBlock) {
+        [self addGestureRecognizer:gesture];
+    }
+
+    UILongPressGestureRecognizer *longGesture = [UILongPressGestureRecognizer bk_recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateRecognized) longBlock();
+    }];
+    if (longBlock) {
+        [gesture requireGestureRecognizerToFail:longGesture];
+        [self addGestureRecognizer:longGesture];
+    }
 }
 
 @end
