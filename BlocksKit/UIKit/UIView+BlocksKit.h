@@ -69,6 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)bk_eachSubview:(void (^)(UIView *subview))block;
 
+- (void)bk_whenLongPressed:(void (^)(void))longBlock tapped:(void (^)(void))tapBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END
