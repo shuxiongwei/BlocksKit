@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bk_whenLongPressed:(void (^)(void))longBlock tapped:(void (^)(void))tapBlock;
 
+- (void)bk_whenLongPressed:(void (^)(void))longBlock;
+
 @end
 
 NS_ASSUME_NONNULL_END
