@@ -97,7 +97,6 @@
         if (state == UIGestureRecognizerStateRecognized) longBlock();
     }];
     if (longBlock) {
-        [gesture requireGestureRecognizerToFail:longGesture];
         [self addGestureRecognizer:longGesture];
     }
 }
