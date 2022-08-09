@@ -88,4 +88,19 @@
     }
 }
 
+- (void)bk_whenLongPressed:(void (^)(void))longBlock {
+    if (!longBlock) return;
+    
+    self.userInteractionEnabled = YES;
+
+    UILongPressGestureRecognizer *longGesture = [UILongPressGestureRecognizer bk_recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
+        if (state == UIGestureRecognizerStateRecognized) longBlock();
+    }];
+    if (longBlock) {
+        [gesture requireGestureRecognizerToFail:longGesture];
+        [self addGestureRecognizer:longGesture];
+    }
+}
+
+
 @end
