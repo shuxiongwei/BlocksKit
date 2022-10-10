@@ -94,8 +94,10 @@
     self.userInteractionEnabled = YES;
 
     UILongPressGestureRecognizer *longGesture = [UILongPressGestureRecognizer bk_recognizerWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-        if (state == UIGestureRecognizerStateRecognized) longBlock();
+        if (state == UIGestureRecognizerStateBegan) longBlock();
     }];
+    longGesture.minimumPressDuration = 0.4;
+    
     if (longBlock) {
         [self addGestureRecognizer:longGesture];
     }
